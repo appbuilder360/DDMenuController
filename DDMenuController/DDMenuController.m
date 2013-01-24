@@ -33,8 +33,15 @@
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
 
+@interface DDMenuController ()
+
+
+@property (nonatomic,assign) BOOL enabled;
+@end
 
 @interface DDMenuController (Internal)
+
+
 - (void)showShadow:(BOOL)val;
 @end
 
@@ -48,6 +55,8 @@
 
 @synthesize tap=_tap;
 @synthesize pan=_pan;
+
+@synthesize enabled;
 
 
 - (id)initWithRootViewController:(UIViewController*)controller {
@@ -73,6 +82,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.enabled = YES;
     [self setRootViewController:_root]; // reset root
     
     if (!_tap) {
@@ -343,6 +353,11 @@
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
 
+    if(!self.enabled) {
+        return NO;
+    }
+    
+    
     // Check for horizontal pan gesture
     if (gestureRecognizer == _pan) {
 
@@ -731,6 +746,15 @@
     
 }
 
+-(void)disableGestures {
+    self.enabled = NO;
+    
+}
+
+-(void)enableGestures {
+    self.enabled = YES;
+
+}
 
 #pragma mark - Actions 
 
